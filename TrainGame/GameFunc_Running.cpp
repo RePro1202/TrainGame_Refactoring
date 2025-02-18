@@ -241,7 +241,7 @@ void Running::HandleEvents()
 {
 	SDL_Event event;
 
-	eve_->commandHandel();
+	eve_->commandHandle();
 	if (SDL_PollEvent(&event))
 	{
 		switch (event.type)
