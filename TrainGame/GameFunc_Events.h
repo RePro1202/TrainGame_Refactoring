@@ -39,14 +39,14 @@ private:
 	SDL_Color red_;
 	SDL_Color green_;
 
-	int distance_;
-	bool eventState_;
-	int commandState_;
+	int distance_; // Runnig에서 가져온 distance값 저장
+	bool eventState_;// 이벤트 발생중인지 아닌지
+	int commandState_;// 커맨드 성공여부
 	int command_[5];
 	int trueCommand_[5];
 	int commandCount_;
-	int random_;
-	int passCount_;
+	int random_;// 이벤트 종류 랜덤값
+	int passCount_;// 커맨드 성공 횟수( 커맨드를 여러 세트 성공해야 통과 기능 위해서)
 
 	bool time_out_;
 	bool right_key_;
@@ -62,7 +62,7 @@ public:
 	void eventSet();
 	void runEvent(int dis);
 	void showEvent();
-	void commandHandel();
+	void commandHandle();
 	void compareCommand();
 	void SetTimeOut(bool);
 	void SetPast(int i);
@@ -70,6 +70,10 @@ public:
 
 	void SetRightKey(bool i);
 	bool GetRightKey();
+
+private:
+	void handleKeyDown(SDL_Keycode key);
+	void resetEvent();
 };
 
 class EventScore 
