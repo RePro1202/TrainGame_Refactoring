@@ -1,13 +1,16 @@
 #include "TSDL.h"
-
+#include <stdexcept>
 
 TSDL::TSDL()
 {
 }
 
-SDL_Texture* TSDL::CreateTexture(const char* path, const Color KeyColor)
+SDL_Texture* TSDL::CreateTexture(const char* path, const SDL_Color KeyColor)
 {
 	SDL_Surface* surface = IMG_Load(path);
+	if (!surface)
+		throw std::runtime_error("IMG_Load failed for path: " + std::string(path));
+
 	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format, KeyColor.r, KeyColor.g, KeyColor.b));
 
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(g_renderer, surface);
@@ -16,15 +19,16 @@ SDL_Texture* TSDL::CreateTexture(const char* path, const Color KeyColor)
 	return texture;
 }
 
-SDL_Texture* TSDL::CreateTexture(const char* path, const SDL_Color KeyColor)
+SDL_Texture* TSDL::CreateTexture(const char* path, const Color KeyColor)
 {
-	SDL_Surface* surface = IMG_Load(path);
-	SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format, KeyColor.r, KeyColor.g, KeyColor.b));
+	SDL_Color color = { KeyColor.r, KeyColor.g, KeyColor.b };
 
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(g_renderer, surface);
-	SDL_FreeSurface(surface);
+	CreateTexture(path, color);
+}
 
-	return texture;
+SDL_Texture* TSDL::CreateTexture(const char* path)
+{
+	return CreateTexture(path, Color());
 }
 
 SDL_Texture* TSDL::CreateTextureToFont(TTF_Font* font, const char* text, const SDL_Color fg)
@@ -47,12 +51,6 @@ SDL_Texture* TSDL::CreateTextureToFont(TTF_Font* font, const char* text, const S
 
 	return CreateTextureToFont(font, text, fg);
 }
-
-SDL_Texture* TSDL::CreateTexture(const char* path)
-{
-	return CreateTexture(path, Color());
-}
-
 
 
 Color::Color()
